@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ▼ 每篇必改:title / description / canonical -->
+<title>【文章标题】 | minnan.org</title>
+<meta name="description" content="【150字内英文摘要,含核心关键词】">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Gentium+Book+Plus:ital@0;1&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brick:#8E3B2F;--brick-deep:#5C241C;--paper:#F2E9D8;--paper-warm:#EADDC4;
+  --ink:#21343A;--gold:#B8863B;--stone:#A8A093;--seal:#B3352B;
+  --serif-en:"Cormorant Garamond","Noto Serif TC",serif;
+  --serif-body:"Gentium Book Plus","Noto Serif TC",serif;
+  --serif-tc:"Noto Serif TC",serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--serif-body);background:var(--paper);color:var(--ink);line-height:1.75;font-size:17.5px}
+a{color:var(--brick);text-decoration:none}
+a:hover{color:var(--brick-deep)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px}
+header.site{background:var(--paper);border-bottom:1px solid rgba(33,52,58,.15)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1080px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--serif-en);font-size:1.25rem;color:var(--ink)}
+.chop{width:38px;height:38px;background:var(--seal);color:#fff;font-family:var(--serif-tc);font-weight:700;font-size:.85rem;line-height:1.05;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:4px;transform:rotate(-3deg)}
+.nav .back{font-family:var(--serif-en);font-size:1rem;color:var(--ink)}
+.hero-a{background:var(--brick);color:var(--paper);padding:70px 0 60px}
+.hero-a .kicker{font-family:var(--serif-tc);letter-spacing:.5em;color:var(--paper-warm);font-size:1rem;margin-bottom:14px}
+.hero-a h1{font-family:var(--serif-en);font-weight:500;font-size:clamp(2rem,5vw,3.4rem);line-height:1.12;max-width:20ch}
+.hero-a .standfirst{margin-top:20px;font-size:1.12rem;font-style:italic;color:#F0E6D2;max-width:56ch}
+.ridge{display:block;width:100%;height:40px;margin-top:-1px}
+article{padding:60px 0 30px}
+article p{margin:0 0 1.35em}
+article h2{font-family:var(--serif-en);font-weight:600;font-size:1.7rem;margin:2em 0 .7em;line-height:1.2}
+article h2 .zi{font-family:var(--serif-tc);color:var(--gold);font-size:1.05rem;letter-spacing:.35em;display:block;margin-bottom:4px}
+.pull{border-left:5px solid var(--brick);background:var(--paper-warm);padding:22px 26px;margin:2em 0;font-size:1.15rem;font-family:var(--serif-en);line-height:1.5}
+.pull .tc{font-family:var(--serif-tc);color:var(--brick);display:block;margin-top:8px;font-size:1rem;letter-spacing:.15em}
+table{width:100%;border-collapse:collapse;margin:1.6em 0;font-size:.95rem;background:#fff7}
+th,td{border:1px solid var(--stone);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--ink);color:var(--paper);font-family:var(--serif-en);font-weight:600}
+td i{font-style:normal;font-family:var(--serif-tc)}
+/* 詞條卡 word entry:原词/汉字/罗马字/释义 四位一体 */
+.word-entry{
+  display:flex;gap:22px;align-items:baseline;flex-wrap:wrap;
+  border:1px solid var(--gold);background:rgba(184,134,59,.08);
+  padding:18px 24px;margin:1.6em 0;border-radius:2px;
+}
+.word-entry .hanzi{font-family:var(--serif-tc);font-weight:700;font-size:2.2rem;color:var(--brick)}
+.word-entry .poj{font-size:1.25rem;font-style:italic}
+.word-entry .gloss{font-size:.98rem;color:#3d4a4e}
+/* 地区差异 regional variation */
+.regions{margin:1.6em 0;border:1px solid var(--stone);border-radius:2px;overflow:hidden}
+.regions .rrow{display:flex;border-bottom:1px solid var(--stone);background:#fff7}
+.regions .rrow:last-child{border-bottom:none}
+.regions .rlabel{flex:0 0 160px;padding:10px 14px;background:var(--paper-warm);font-family:var(--serif-en);font-weight:600}
+.regions .rval{padding:10px 14px}
+/* 资料来源 sources */
+.sources{margin:2.5em 0 0;font-size:.88rem;color:#5a6468;border-top:1px solid var(--stone);padding-top:16px}
+.sources h4{font-family:var(--serif-en);font-size:1rem;color:var(--ink);margin-bottom:6px}
+.sources ol{margin-left:1.3em}
+/* 征集入口 endnote */
+.endnote{margin:2.5em 0 0;padding:28px 30px;background:#FBF5E8;border:1px solid var(--stone);position:relative}
+.endnote::before{content:"";position:absolute;inset:8px;border:2px solid rgba(179,53,43,.5);pointer-events:none}
+.endnote p{margin:0 0 .6em;position:relative;z-index:2}
+.endnote .tc{font-family:var(--serif-tc);color:var(--brick);letter-spacing:.2em}
+footer.site{background:var(--ink);color:var(--paper-warm);padding:44px 0;font-size:.95rem;margin-top:70px}
+footer .motto{font-family:var(--serif-tc);color:var(--gold);letter-spacing:.15em;margin-top:8px}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav" aria-label="main">
+    <a class="logo" href="../index.html"><span class="chop" aria-hidden="true">咱人</span>minnan.org</a>
+    <a class="back" href="../index.html">← Home 返厝</a>
+  </nav>
+</header>
+
+<div class="hero-a">
+  <div class="wrap">
+    <!-- ▼ kicker:栏目字 根/音/信/味/批 + 篇名 -->
+    <div class="kicker">【栏目】 · 【篇名雅称】</div>
+    <h1>【English Title】</h1>
+    <p class="standfirst">【一句话导语,制造钩子】</p>
+  </div>
+</div>
+<svg class="ridge" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,46 L0,30 Q60,2 130,26 L600,38 L1070,26 Q1140,2 1200,30 L1200,46 Z" fill="#8E3B2F"/>
+  <path d="M0,46 L0,34 Q60,8 130,30 L600,42 L1070,30 Q1140,8 1200,34 L1200,46 Z" fill="#F2E9D8"/>
+</svg>
+
+<article>
+  <div class="wrap">
+
+    <p>【开篇段:从读者的餐桌/家庭/城市切入,不从福建切入】</p>
+
+    <!-- ═══ 规范要素①②③④:詞條卡(原词+汉字+罗马字+英文释义) ═══ -->
+    <div class="word-entry">
+      <span class="hanzi">【漢字】</span>
+      <span class="poj">【POJ罗马字,如 lūn-piáⁿ】</span>
+      <span class="gloss">【English gloss:literal meaning + usage】</span>
+    </div>
+
+    <h2><span class="zi">【小节眉字】</span>【Section heading】</h2>
+    <p>【正文……】</p>
+
+    <div class="pull">
+      【金句抽出,适合截图分享的一句】
+      <span class="tc">【汉字对照】</span>
+    </div>
+
+    <!-- ═══ 规范要素⑤:地区差异 ═══ -->
+    <h2><span class="zi">諸港</span>Across the ports</h2>
+    <div class="regions">
+      <div class="rrow"><div class="rlabel">Quanzhou 泉州</div><div class="rval">【本源说法/习俗】</div></div>
+      <div class="rrow"><div class="rlabel">Manila 呂宋</div><div class="rval">【菲律宾变体】</div></div>
+      <div class="rrow"><div class="rlabel">Penang 檳城</div><div class="rval">【马来西亚变体】</div></div>
+      <div class="rrow"><div class="rlabel">Singapore 石叻</div><div class="rval">【新加坡变体】</div></div>
+      <div class="rrow"><div class="rlabel">Medan 棉蘭</div><div class="rval">【印尼变体】</div></div>
+    </div>
+    <p>【差异叙述原则:各港变体是闽南语在不同港口生长出的历史,不是"不标准"】</p>
+
+    <h2><span class="zi">傳承</span>Why this matters</h2>
+    <p>【情感落点段】</p>
+
+    <!-- ═══ 规范要素⑥:资料来源 ═══ -->
+    <div class="sources">
+      <h4>Sources 資料來源</h4>
+      <ol>
+        <li>【来源1:书/论文/档案馆/口述】</li>
+        <li>【来源2】</li>
+      </ol>
+    </div>
+
+    <!-- ═══ 规范要素⑦:家庭记忆征集入口 ═══ -->
+    <div class="endnote">
+      <p><span class="tc">恁兜安怎講?</span> — What does your family call it?</p>
+      <p>Every port kept its own word. Tell us the one your family still uses — <a href="../index.html#letter">every reply becomes part of the archive</a>.</p>
+    </div>
+
+  </div>
+</article>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 minnan.org · The Hokkien Heritage Project</span>
+    <div class="motto">咱人的歷史,咱人自己寫。</div>
+  </div>
+</footer>
+
+</body>
+</html>
