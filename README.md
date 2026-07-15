@@ -1,19 +1,16 @@
-# minnan.org 文化定位版
+# minnan.org cultural homepage v1.2
 
-## 本版修正
-- 修复首页首屏背景石块过大、文字被挤窄的问题。
-- 统一“根、音、信、味、批”五条文化主线。
-- 将“四件行李”改成“四件行李，一封家书”。
-- 删除首页 `NOW SHIPPING / Order via Messenger` 等直接销售表达。
-- 将底部商业板块改为文化档案“唐山物候”，明确先文化、后商业。
-- 页脚补回“批”，统一为“根 · 音 · 信 · 味 · 批”。
-- 新增根目录 `CNAME`，内容为 `minnan.org`。
+This release refocuses the homepage around cultural identity, ancestral houses, and qiaopi memory.
 
-## GitHub 网页覆盖方法
-1. 打开 minnan.org 对应仓库。
-2. 上传本压缩包解压后的全部文件；同名文件选择覆盖。
-3. 确认仓库根目录同时存在 `index.html` 与 `CNAME`。
-4. 等待 GitHub Pages 重新部署约 1–3 分钟。
-5. 浏览器按 `Ctrl + F5` 强制刷新。
+## Main changes
 
-`assets/` 目录当前为空，保留作后续图片、音频和地图资源使用。
+- Smaller, more readable hero headline and larger navigation.
+- Original Minnan ancestral-house hero illustration.
+- New `厝 · 故里的樣子` section covering swallow-tail roofs, rouge brick, 出磚入石, flower tiles, 鳥踏 and lived-in details.
+- Two real historical qiaopi images with visible source and Creative Commons attribution.
+- Clear note distinguishing the wider southeastern-coast qiaopi tradition from Minnan-specific material.
+- Culture-first positioning; no direct shopping or shipping claims.
+- Updated footer navigation: 根 · 音 · 信 · 味 · 厝 · 批.
+- `CNAME`, `robots.txt`, and `sitemap.xml` included.
+
+Upload the contents of this folder to the repository root. Do not upload the ZIP as a single file.

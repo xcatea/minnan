@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Stylised Minnan ancestral house</title>
+  <desc id="desc">A warm illustration of a red-brick Minnan house with swallow-tail rooflines, stone-and-brick walls, flower tiles and a central family hall.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e9d7b9"/><stop offset="1" stop-color="#c98e67"/></linearGradient>
+    <linearGradient id="brick" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9b4637"/><stop offset="1" stop-color="#6f2e26"/></linearGradient>
+    <linearGradient id="roof" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#51201d"/><stop offset="1" stop-color="#2f1716"/></linearGradient>
+    <pattern id="brickPattern" width="74" height="34" patternUnits="userSpaceOnUse">
+      <rect width="74" height="34" fill="url(#brick)"/>
+      <path d="M0 33.5H74M37 0v17M0 17h74" stroke="#d47a5a" stroke-opacity=".42" stroke-width="2"/>
+    </pattern>
+    <pattern id="stonePattern" width="120" height="76" patternUnits="userSpaceOnUse">
+      <rect width="120" height="76" fill="#918477"/>
+      <path d="M0 38h120M60 0v38M20 38v38M100 38v38" stroke="#c3b8a8" stroke-width="3" opacity=".5"/>
+    </pattern>
+    <pattern id="tilePattern" width="72" height="72" patternUnits="userSpaceOnUse">
+      <rect width="72" height="72" fill="#e8d8b7"/>
+      <path d="M36 5C45 16 56 27 67 36 56 45 45 56 36 67 27 56 16 45 5 36 16 27 27 16 36 5Z" fill="none" stroke="#336b68" stroke-width="4"/>
+      <circle cx="36" cy="36" r="8" fill="#b8863b"/>
+      <path d="M7 7l58 58M65 7L7 65" stroke="#9b4637" stroke-width="2" opacity=".7"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#3a1815" flood-opacity=".35"/></filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="956" cy="142" r="72" fill="#f3d69a" opacity=".78"/>
+  <path d="M0 650C190 570 360 590 520 635s355 61 680-20v285H0Z" fill="#654239" opacity=".28"/>
+  <g filter="url(#shadow)">
+    <path d="M100 355Q210 330 332 218Q388 167 459 144Q422 207 414 271Q507 226 600 210Q693 226 786 271Q778 207 741 144Q812 167 868 218Q990 330 1100 355Q948 335 845 316Q718 292 600 302Q482 292 355 316Q252 335 100 355Z" fill="url(#roof)"/>
+    <path d="M90 356Q224 335 350 304Q479 270 600 281Q721 270 850 304Q976 335 1110 356" fill="none" stroke="#d69b67" stroke-width="18" stroke-linecap="round"/>
+    <path d="M89 354Q224 333 350 302Q479 268 600 279Q721 268 850 302Q976 333 1111 354" fill="none" stroke="#3d1a18" stroke-width="8" stroke-linecap="round"/>
+    <path d="M134 351Q220 345 322 309L289 274Q204 324 112 331Z" fill="#6b2d27"/>
+    <path d="M1066 351Q980 345 878 309L911 274Q996 324 1088 331Z" fill="#6b2d27"/>
+    <rect x="145" y="350" width="910" height="395" rx="3" fill="url(#brickPattern)"/>
+    <rect x="145" y="628" width="910" height="117" fill="url(#stonePattern)"/>
+    <rect x="469" y="385" width="262" height="360" fill="#39211e"/>
+    <rect x="493" y="421" width="214" height="324" fill="#17171a"/>
+    <rect x="520" y="466" width="160" height="279" fill="#6e241f"/>
+    <rect x="548" y="501" width="104" height="244" fill="#2c1d1a"/>
+    <rect x="500" y="397" width="200" height="52" rx="2" fill="#33231c" stroke="#d0a15e" stroke-width="4"/>
+    <text x="600" y="432" text-anchor="middle" fill="#e8cf96" font-size="28" font-family="serif" letter-spacing="8">祖德流芳</text>
+    <rect x="174" y="434" width="258" height="194" fill="url(#stonePattern)" stroke="#e5caa4" stroke-width="6"/>
+    <rect x="768" y="434" width="258" height="194" fill="url(#stonePattern)" stroke="#e5caa4" stroke-width="6"/>
+    <rect x="184" y="444" width="238" height="174" fill="url(#brickPattern)" opacity=".82"/>
+    <rect x="778" y="444" width="238" height="174" fill="url(#brickPattern)" opacity=".82"/>
+    <rect x="174" y="650" width="258" height="72" fill="url(#tilePattern)"/>
+    <rect x="768" y="650" width="258" height="72" fill="url(#tilePattern)"/>
+    <g fill="#1e2928" stroke="#d8c3a1" stroke-width="5">
+      <path d="M225 477h156v111H225z"/><path d="M819 477h156v111H819z"/>
+    </g>
+    <g stroke="#d8c3a1" stroke-width="5">
+      <path d="M303 477v111M225 532h156M897 477v111M819 532h156"/>
+    </g>
+    <g fill="#b7352d">
+      <rect x="451" y="390" width="12" height="331"/><rect x="737" y="390" width="12" height="331"/>
+      <rect x="164" y="404" width="14" height="324"/><rect x="1022" y="404" width="14" height="324"/>
+    </g>
+    <g fill="#e8c778" font-family="serif" font-size="22">
+      <text x="461" y="448" writing-mode="tb">燕翼貽謀傳世澤</text>
+      <text x="747" y="448" writing-mode="tb">龍章啟運振家聲</text>
+    </g>
+    <path d="M94 745h1012l-55 60H149Z" fill="#8d7767"/>
+    <path d="M256 805h688l-38 37H294Z" fill="#aa9581"/>
+  </g>
+  <g opacity=".92">
+    <path d="M96 800c40-58 95-84 165-62-24 14-42 34-53 60-37-7-74-6-112 2Z" fill="#304d3c"/>
+    <path d="M1104 800c-40-58-95-84-165-62 24 14 42 34 53 60 37-7 74-6 112 2Z" fill="#304d3c"/>
+  </g>
+</svg>
