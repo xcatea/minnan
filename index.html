@@ -10,7 +10,8 @@
 <meta property="og:description" content="The cultural home of the Hokkien world—an authentic reflection of Minnan, past, present and future.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://minnan.org/">
-<meta property="og:image" content="https://minnan.org/assets/images/minnan-home-real.png">
+<meta property="og:image" content="https://minnan.org/assets/images/minnan-home-real.webp">
+<link rel="preload" as="image" href="assets/images/minnan-home-real.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Gentium+Book+Plus:ital@0;1&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
@@ -208,13 +209,16 @@ footer .fine{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pillar:hover,.feat-card:hover{transform:none}}
 
 .logo span:last-child{display:flex;flex-direction:column;line-height:1}.logo strong{font-family:var(--serif-en);font-size:1.18rem;letter-spacing:.13em}.logo small{margin-top:5px;font-size:.68rem;letter-spacing:.12em;color:var(--ink-soft)}
-.hero{min-height:calc(100vh - 82px);background-image:linear-gradient(90deg,rgba(35,12,9,.92) 0%,rgba(54,18,13,.72) 37%,rgba(54,18,13,.18) 68%,rgba(20,10,6,.08) 100%),url('assets/images/minnan-home-real.png');background-size:cover;background-position:center}
+.hero{min-height:calc(100vh - 82px);background-image:linear-gradient(90deg,rgba(35,12,9,.92) 0%,rgba(54,18,13,.72) 37%,rgba(54,18,13,.18) 68%,rgba(20,10,6,.08) 100%),url('assets/images/minnan-home-real.webp');background-size:cover;background-position:center}
 .hero::before{background:linear-gradient(180deg,rgba(20,8,6,.08),rgba(20,8,6,.23))}
 .hero-inner{grid-template-columns:minmax(0,.72fr) minmax(340px,1.28fr);min-height:calc(100vh - 82px)}
 .hero-visual{display:none}.hero-copy{max-width:660px}.hero h1{max-width:11ch}.hero .lead{font-size:1.14rem;text-shadow:0 1px 12px rgba(0,0,0,.5)}
 .brand-question{margin-top:24px;font-family:var(--serif-en);font-size:clamp(1.55rem,2.6vw,2.25rem);line-height:1.1;color:#f8e9d2}.brand-question span{display:block;margin-top:8px;font-family:var(--serif-tc);font-size:1.05rem;letter-spacing:.08em;color:#e6bd75}
 .time-section{background:#f6eddf}.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}.time-card{position:relative;min-height:390px;overflow:hidden;background:#231713;color:#fff}.time-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.time-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 28%,rgba(20,10,7,.88) 100%)}.time-copy{position:absolute;z-index:2;left:24px;right:24px;bottom:22px}.time-copy .no{font-family:var(--serif-en);font-size:.86rem;letter-spacing:.22em;color:#e8bc72}.time-copy h3{font-family:var(--serif-tc);font-size:1.65rem;margin:6px 0}.time-copy p{font-size:.94rem;line-height:1.55;color:#f3e8d9}.truth-line{margin-top:28px;padding:22px 25px;border-left:5px solid var(--brick);background:#fffaf1;font-family:var(--serif-tc);font-size:1.12rem;line-height:1.8}
 @media(max-width:780px){.hero{min-height:auto;background-position:62% center}.hero-inner{min-height:780px;align-items:end}.hero-copy{padding:28px 0;background:linear-gradient(90deg,rgba(35,12,9,.7),transparent)}.time-grid{grid-template-columns:1fr}.time-card{min-height:330px}}
+
+/* Performance: skip rendering off-screen sections until needed */
+main section:not(.hero){content-visibility:auto;contain-intrinsic-size:800px;}
 </style>
 </head>
 <body>
@@ -259,9 +263,9 @@ footer .fine{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
     <h2 class="sec">Past. Present. Future.</h2>
     <p class="sec-lead">Minnan is not a scene frozen in the past. It is a living world—remembered, lived and continually renewed across villages and ports.</p>
     <div class="time-grid">
-      <article class="time-card"><img src="assets/images/qiaopi-chaoan-mother.webp" alt="A historic qiaopi letter"><div class="time-copy"><div class="no">PAST · 過去</div><h3>故事從這裡開始</h3><p>祖厝、鄉音與僑批，留下遠行以前與跨海以後的真實記憶。</p></div></article>
-      <article class="time-card"><img src="assets/images/quanzhou-home-courtyard.webp" alt="A lived-in Minnan courtyard"><div class="time-copy"><div class="no">PRESENT · 現在</div><h3>閩南仍在生活</h3><p>它仍在家門、飯桌、香火與每天使用的語言裡，不只是被保存的遺產。</p></div></article>
-      <article class="time-card"><img src="assets/images/redbrick-lane.png" alt="A red-brick Minnan lane leading forward"><div class="time-copy"><div class="no">FUTURE · 未來</div><h3>故事仍在繼續</h3><p>每一代人都會用自己的方式，重新理解、書寫並帶著閩南走向下一個港口。</p></div></article>
+      <article class="time-card"><img src="assets/images/qiaopi-chaoan-mother.webp" alt="A historic qiaopi letter" loading="lazy" decoding="async" width="1800" height="1011"><div class="time-copy"><div class="no">PAST · 過去</div><h3>故事從這裡開始</h3><p>祖厝、鄉音與僑批，留下遠行以前與跨海以後的真實記憶。</p></div></article>
+      <article class="time-card"><img src="assets/images/quanzhou-home-courtyard.webp" alt="A lived-in Minnan courtyard" loading="lazy" decoding="async" width="1280" height="853"><div class="time-copy"><div class="no">PRESENT · 現在</div><h3>閩南仍在生活</h3><p>它仍在家門、飯桌、香火與每天使用的語言裡，不只是被保存的遺產。</p></div></article>
+      <article class="time-card"><img src="assets/images/redbrick-lane.webp" alt="A red-brick Minnan lane leading forward" loading="lazy" decoding="async" width="1000" height="700"><div class="time-copy"><div class="no">FUTURE · 未來</div><h3>故事仍在繼續</h3><p>每一代人都會用自己的方式，重新理解、書寫並帶著閩南走向下一個港口。</p></div></article>
     </div>
     <div class="truth-line">我們記錄的，不是一個停留在過去的閩南。<br>我們記錄的是一個不斷生長、不斷遠航，也不斷回望來處的閩南。</div>
   </div>
@@ -322,20 +326,20 @@ footer .fine{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
     <div class="house-gallery">
       <article class="media-card">
         <figure>
-          <img src="assets/images/quanzhou-home-courtyard.webp" alt="Courtyard of the historic home of Li Zhi in Quanzhou" loading="lazy">
+          <img src="assets/images/quanzhou-home-courtyard.webp" alt="Courtyard of the historic home of Li Zhi in Quanzhou" loading="lazy" decoding="async">
           <figcaption>Courtyard of the Home of Li Zhi, Quanzhou, Fujian. Photo: Zhangzhugang / Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Resized for web display. <a href="https://commons.wikimedia.org/wiki/File:Quanzhou_Li_Zhi_Guju_20120229-2.jpg" target="_blank" rel="noopener">Original source</a>.</figcaption>
         </figure>
       </article>
       <div class="photo-stack">
         <article class="media-card">
           <figure>
-            <img src="assets/images/quanzhou-home-interior.webp" alt="Timber roof and family hall interior at the historic home of Li Zhi in Quanzhou" loading="lazy">
+            <img src="assets/images/quanzhou-home-interior.webp" alt="Timber roof and family hall interior at the historic home of Li Zhi in Quanzhou" loading="lazy" decoding="async">
             <figcaption>Interior roof structure, Home of Li Zhi, Quanzhou. Photo: Zhangzhugang / Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Resized and display-cropped. <a href="https://commons.wikimedia.org/wiki/File:Quanzhou_Li_Zhi_Guju_20120229-4.jpg" target="_blank" rel="noopener">Original source</a>.</figcaption>
           </figure>
         </article>
         <article class="media-card">
           <figure>
-            <img src="assets/images/minnan-house-hero.svg" alt="Designed illustration highlighting Minnan roof, red brick, stonework and flower tiles" loading="lazy">
+            <img src="assets/images/minnan-house-hero.svg" alt="Designed illustration highlighting Minnan roof, red brick, stonework and flower tiles" loading="lazy" decoding="async">
             <figcaption>Original minnan.org illustration combining several recurring Minnan visual motifs: swallow-tail rooflines, rouge brick, brick-and-stone masonry, flower tiles, door couplets, and the family hall.</figcaption>
           </figure>
         </article>
@@ -385,11 +389,11 @@ footer .fine{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
     </div>
     <div class="qiaopi-gallery">
       <article class="qiaopi-card">
-        <img src="assets/images/qiaopi-chaoan-mother.webp" alt="Historic qiaopi remittance documents addressed to a mother in Chao'an" loading="lazy">
+        <img src="assets/images/qiaopi-chaoan-mother.webp" alt="Historic qiaopi remittance documents addressed to a mother in Chao'an" loading="lazy" decoding="async">
         <div class="caption"><h3>To Mother, across the sea</h3><p>An open-license photograph of qiaopi addressed to a mother in Bailian village, Chao’an, recording a remittance of HK$900. The paper bears the marks of handling, routing, annotation, and use — not an abstract history, but a family transaction that survived.</p><small class="credit">Collection photographed at Chaozhou Museum. Photo: 三猎 / Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Resized and display-cropped; derivative image remains under CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:%E4%BE%A8%E6%89%B91.jpg" target="_blank" rel="noopener">Original file and metadata</a>.</small></div>
       </article>
       <article class="qiaopi-card portrait">
-        <img src="assets/images/qiaopi-singapore-wife.webp" alt="Historic qiaopi sent from Singapore to a wife in Chao'an" loading="lazy">
+        <img src="assets/images/qiaopi-singapore-wife.webp" alt="Historic qiaopi sent from Singapore to a wife in Chao'an" loading="lazy" decoding="async">
         <div class="caption"><h3>From 石叻 to a wife at home</h3><p>This qiaopi records a HK$50 remittance connected with Singapore — historically written 石叻 — and addressed to a wife in Houguo village, Chao’an. The recipient’s name dominates the worn paper: one person, one household, one waiting address.</p><small class="credit">Collection photographed at Chaozhou Museum. Photo: 三猎 / Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Resized and display-cropped; derivative image remains under CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:%E4%BE%A8%E6%89%B92.jpg" target="_blank" rel="noopener">Original file and metadata</a>.</small></div>
       </article>
     </div>
