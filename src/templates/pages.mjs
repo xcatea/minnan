@@ -2,6 +2,7 @@
 import { layout, newsletter, storyList, glyphHero, roof, esc, fmtDate } from './layout.mjs';
 import { archGrid, homeQuote, houseGallery, registry, qiaopiGallery, portLinks, wordbook } from './sections.mjs';
 import { SITE, PILLARS, PORTS, pillar } from '../data/site.mjs';
+import { homeReply, shopTeaser } from './shop.mjs';
 
 const page = (path, opts) => ({ path, html: layout({ path, ...opts }) });
 const inPillar = (stories, key) => stories.filter((s) => s.pillar === key || s.also.includes(key));
@@ -116,6 +117,8 @@ ${roof()}
   </div>
 </section>
 
+${homeReply()}
+
 <section class="ports" id="ports">
   <div class="wrap">
     <div class="eyebrow">埠 · 天下港</div>
@@ -182,7 +185,8 @@ const SECTION_COPY = {
         <p>Every Hokkien surname linked to the clan halls and ancestral villages it is known from — each entry with its source, and a clear note where the record is uncertain.</p>
         <p>Subscribers to the weekly letter will hear first when it opens.</p>
       </div>
-    </div>`,
+    </div>
+    ${shopTeaser(['find-our-village', 'read-a-letter'], { zi: '代尋', heading: 'Want help now?', text: 'Send us what you have. We trace it for you, and tell you before you pay whether there is enough to go on.' })}`,
   },
   tongue: {
     lead: 'Compare Manila Lannang-uè, Penang Hokkien, Singapore Hokkien, Medan Hokkien, and the speech of southern Fujian. Start with the words you already use.',
@@ -228,7 +232,8 @@ const SECTION_COPY = {
         <ul><li>Misua and the long-life noodle on every birthday table</li><li>Tikoy, tiⁿ-kóe and the sweet start to the year</li><li>Anxi tea and the shops that carried it overseas</li></ul>
         <p>Every food word on this site also lives in the <a class="text-link" style="margin:0" href="/tongue/#wordbook">wordbook</a>.</p>
       </div>
-    </div>`,
+    </div>
+    ${shopTeaser(['long-life-box', 'new-year-box', 'anxi-tea'], { zi: '回批', heading: 'Send the taste of home', text: 'Packed in southern Fujian and sent to the family in Singapore, Malaysia and the Philippines, with a red card carrying your words.' })}`,
   },
   houses: {
     lead: 'Before many of us remember the language, we remember the house: the curve of a swallow-tail roof, the red of sun-warmed brick, the shaded hall, and the family altar.',
@@ -263,7 +268,8 @@ const SECTION_COPY = {
         <h3>Letters, read aloud</h3>
         <p>Clearly sourced qiaopi from Quanzhou, Jinjiang, Xiamen, Zhangzhou and the Southeast Asian ports — transcribed, translated and explained for a generation that may no longer read the old script.</p>
       </div>
-    </div>`,
+    </div>
+    ${shopTeaser(['read-a-letter'], { zi: '讀批', heading: 'Have a letter nobody can read?', text: 'Send us a photo. We send back every word, in English, with what it tells you about your family.' })}`,
   },
 };
 
@@ -354,6 +360,7 @@ ${s.html}
     <div class="endnote">
       <p><span class="tc">知影你對佗位來</span> — Know where you come from.</p>
       <p>Trace where your own family’s words came from — start with your surname at <a href="/roots/">Roots 根</a>, or look up what your grandmother was saying in the <a href="/tongue/#wordbook">wordbook 音</a>.</p>
+      <p>Or send the taste itself: <a href="/shop/">回批 · boxes packed in Fujian</a>, with a red card carrying your words.</p>
     </div>
   </div>
 </article>

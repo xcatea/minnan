@@ -142,6 +142,8 @@ async function build() {
   const imp = (rel) => import(pathToFileURL(p(rel)).href + bust);
   const { SITE, PILLARS, PORTS } = await imp('src/data/site.mjs');
   const pages = await imp('src/templates/pages.mjs');
+  const shop = await imp('src/templates/shop.mjs');
+  const { ITEMS } = await imp('src/data/shop.mjs');
 
   fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
@@ -164,6 +166,10 @@ async function build() {
     ...PORTS.map((pt) => pages.portPage(pt, ctx)),
     pages.storiesIndex(ctx),
     ...stories.map((s) => pages.storyPage(s, ctx)),
+    shop.shopIndex(ctx),
+    ...ITEMS.map((it) => shop.itemPage(it, ctx)),
+    shop.policyPage(ctx),
+    shop.contactPage(ctx),
     pages.about(ctx),
     pages.thanks(ctx),
     pages.notFound(ctx),

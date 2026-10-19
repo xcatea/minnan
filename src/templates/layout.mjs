@@ -1,8 +1,36 @@
 // Shared page shell and reusable pieces.
-import { SITE, PILLARS } from '../data/site.mjs';
+import { SITE, PILLARS, CONTACT } from '../data/site.mjs';
 
 export const esc = (s = '') =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// Contact details: build variables override src/data/site.mjs.
+export function contact() {
+  const env = process.env;
+  const c = {
+    whatsapp: (env.CONTACT_WHATSAPP ?? CONTACT.whatsapp ?? '').replace(/\D/g, ''),
+    wechat: env.CONTACT_WECHAT ?? CONTACT.wechat ?? '',
+    wechatQr: env.CONTACT_WECHAT_QR ?? CONTACT.wechatQr ?? '',
+    messenger: env.CONTACT_MESSENGER ?? CONTACT.messenger ?? '',
+    email: env.CONTACT_EMAIL ?? CONTACT.email ?? '',
+  };
+  c.any = Boolean(c.whatsapp || c.wechat || c.messenger || c.email);
+  return c;
+}
+
+export const waLink = (number, text = '') =>
+  `https://wa.me/${number}${text ? `?text=${encodeURIComponent(text)}` : ''}`;
+
+// Buttons to reach a person. `text` pre-fills the WhatsApp message.
+export function peopleLinks({ text = '', cls = 'im-links' } = {}) {
+  const c = contact();
+  const out = [];
+  if (c.whatsapp) out.push(`<a class="im im-wa" href="${waLink(c.whatsapp, text)}" target="_blank" rel="noopener" data-wa-base="${c.whatsapp}">WhatsApp</a>`);
+  if (c.wechat) out.push(`<a class="im im-wx" href="/contact/#wechat">WeChat</a>`);
+  if (c.messenger) out.push(`<a class="im im-fb" href="https://m.me/${esc(c.messenger)}" target="_blank" rel="noopener">Messenger</a>`);
+  if (c.email) out.push(`<a class="im im-mail" href="mailto:${esc(c.email)}${text ? `?subject=${encodeURIComponent('minnan.org')}&body=${encodeURIComponent(text)}` : ''}">Email</a>`);
+  return out.length ? `<div class="${cls}">${out.join('')}</div>` : '';
+}
 
 const FONTS =
   'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Gentium+Book+Plus:ital@0;1&family=Noto+Serif+TC:wght@400;600;700&display=swap';
@@ -59,6 +87,7 @@ ${header(current)}
 ${main}
 </main>
 ${footer()}
+${askPanel()}
 <script src="/site.js" defer></script>
 ${beacon}
 </body>
@@ -77,9 +106,39 @@ function header(current) {
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-menu">Menu · 選單</button>
     <ul class="nav-links" id="main-menu">
       ${links}
+      <li class="nav-send"><a href="/shop/"${current === 'shop' ? ' aria-current="page"' : ''}>Send<span class="zi">寄</span></a></li>
     </ul>
   </nav>
 </header>`;
+}
+
+// The 問 button: an assistant for questions, and a way to reach a person.
+function askPanel() {
+  const chips = [
+    'What’s in the long-life box?',
+    'Do you ship to my country?',
+    'Can you read my grandfather’s letter?',
+    'What does Lán-nâng mean?',
+  ];
+  return `<div class="ask" data-ask>
+  <button class="ask-fab" type="button" aria-expanded="false" aria-controls="ask-panel"><span class="ask-seal" aria-hidden="true">問</span><span class="ask-lbl">Ask</span></button>
+  <section class="ask-panel" id="ask-panel" role="dialog" aria-labelledby="ask-title" hidden>
+    <header class="ask-head">
+      <div><h2 id="ask-title">問 · Ask minnan.org</h2><p>Words, customs, our boxes, shipping.</p></div>
+      <button class="ask-close" type="button" aria-label="Close">×</button>
+    </header>
+    <div class="ask-log" data-ask-log aria-live="polite">
+      <div class="msg bot"><p>Lí hó! Ask about a Hokkien word, a family custom, our boxes or shipping. To order, a person will answer you directly.</p></div>
+    </div>
+    <div class="ask-chips" data-ask-chips>${chips.map((c) => `<button type="button">${c}</button>`).join('')}</div>
+    <form class="ask-form" data-ask-form>
+      <label class="visually-hidden" for="ask-input">Your question</label>
+      <textarea id="ask-input" name="q" rows="1" maxlength="800" placeholder="Type your question" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <div class="ask-people"><span>Talk to a person</span>${peopleLinks({ text: 'Hello minnan.org, ', cls: 'im-links small' })}</div>
+  </section>
+</div>`;
 }
 
 function footer() {
@@ -91,7 +150,8 @@ function footer() {
     <div class="motto">閩南的故事，仍在繼續。</div>
     <div class="poj">Lán-nâng ê le̍k-sú, lán-nâng ka-tī siá. — Our people’s history, written by our own people.</div>
     <nav class="foot-links" aria-label="Sections">${pillarLinks}</nav>
-    <nav class="foot-links minor" aria-label="More"><a href="/stories/">All stories</a><a href="/tongue/#wordbook">Wordbook</a><a href="/ports/philippines/">Ports</a><a href="/about/">About &amp; sources</a><a href="/rss.xml">RSS</a></nav>
+    <nav class="foot-links" aria-label="Shop"><a href="/shop/">回批 · Send a taste of home</a><a href="/shop/read-a-letter/">讀批 · Read a family letter</a><a href="/shop/find-our-village/">尋根 · Find our village</a></nav>
+    <nav class="foot-links minor" aria-label="More"><a href="/stories/">All stories</a><a href="/tongue/#wordbook">Wordbook</a><a href="/ports/philippines/">Ports</a><a href="/about/">About &amp; sources</a><a href="/contact/">Contact</a><a href="/shop/policy/">Shipping &amp; refunds</a><a href="/rss.xml">RSS</a></nav>
     <div class="fine"><span>© ${year} minnan.org · MINNAN · Past, Present and Future</span><span>One language, a thousand ports. · 一句閩南話，行遍天下港。</span></div>
   </div>
 </footer>`;
@@ -146,7 +206,7 @@ export function glyphHero({ glyph, title, sub, lead, tone = 'ink', crumb = '' })
   const two = [...glyph].length > 1;
   return `<section class="glyph-hero ${tone}">
   <div class="wrap inner">
-    <div class="glyph${two ? ' two' : ''}" aria-hidden="true">${glyph}</div>
+    <div class="glyph${two ? ' two' : ''}" aria-hidden="true">${two ? [...glyph].map((c) => `<i>${c}</i>`).join('') : glyph}</div>
     <div>
       ${crumb ? `<p class="crumb">${crumb}</p>` : ''}
       <h1>${title}</h1>

@@ -10,6 +10,20 @@ export const SITE = {
   ogImage: '/assets/images/minnan-home-real.webp',
 };
 
+// How people reach a person. Leave a value empty to hide that button.
+// Each can also be set without editing code, as a Cloudflare Pages build variable:
+//   CONTACT_WHATSAPP  digits with country code, no + or spaces, e.g. 8613812345678
+//   CONTACT_WECHAT    WeChat ID
+//   CONTACT_MESSENGER Facebook Page username (m.me/<username>)
+//   CONTACT_EMAIL     e.g. hello@minnan.org
+export const CONTACT = {
+  whatsapp: '',
+  wechat: '',
+  wechatQr: '', // e.g. /assets/images/wechat-qr.png — put the image in public/assets/images/
+  messenger: '',
+  email: 'hello@minnan.org',
+};
+
 export const PILLARS = [
   {
     key: 'roots', zi: '根', name: 'Roots', sub: 'Where you come from.',

@@ -1,0 +1,7 @@
+# Copy to .dev.vars for local testing with `npx wrangler pages dev dist`. Never commit .dev.vars.
+NOTIFY_WEBHOOK=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR-KEY
+# Chat brain — pick one, or bind Workers AI as `AI` and leave these empty.
+# CHAT_API_URL=https://api.deepseek.com
+# CHAT_API_KEY=sk-...
+# CHAT_MODEL=deepseek-chat
+# ANTHROPIC_API_KEY=sk-ant-...
