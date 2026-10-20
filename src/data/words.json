@@ -1,0 +1,168 @@
+[
+  {
+    "said": "Lannang",
+    "hanzi": "咱人",
+    "poj": "lán-nâng",
+    "meaning": "“our people” — what Chinese Filipinos call themselves; Lannang-uè (咱人話) is their Hokkien",
+    "ports": [
+      "PH"
+    ]
+  },
+  {
+    "said": "lumpia",
+    "hanzi": "潤餅",
+    "poj": "lūn-piáⁿ",
+    "meaning": "spring roll — literally “moist pastry”",
+    "ports": [
+      "PH"
+    ],
+    "story": "/taste/lumpia-popiah/"
+  },
+  {
+    "said": "lunpia",
+    "hanzi": "潤餅",
+    "poj": "lūn-piáⁿ",
+    "meaning": "spring roll; Semarang’s signature dish",
+    "ports": [
+      "ID"
+    ],
+    "story": "/taste/lumpia-popiah/"
+  },
+  {
+    "said": "popiah",
+    "hanzi": "薄餅",
+    "poj": "po̍h-piáⁿ",
+    "meaning": "spring roll — literally “thin pastry”",
+    "ports": [
+      "MY",
+      "SG"
+    ],
+    "story": "/taste/lumpia-popiah/"
+  },
+  {
+    "said": "pancit",
+    "hanzi": "便食",
+    "poj": "piān-si̍t",
+    "meaning": "noodles — “convenient food”",
+    "ports": [
+      "PH"
+    ]
+  },
+  {
+    "said": "bihon / bihun",
+    "hanzi": "米粉",
+    "poj": "bí-hún",
+    "meaning": "rice vermicelli",
+    "ports": [
+      "PH",
+      "ID",
+      "MY"
+    ]
+  },
+  {
+    "said": "misua",
+    "hanzi": "麵線",
+    "poj": "mī-sòaⁿ",
+    "meaning": "wheat thread noodles, eaten for birthdays",
+    "ports": [
+      "PH"
+    ]
+  },
+  {
+    "said": "hopia",
+    "hanzi": "好餅",
+    "poj": "hó-piáⁿ",
+    "meaning": "filled pastry — “good pastry”",
+    "ports": [
+      "PH"
+    ]
+  },
+  {
+    "said": "tikoy",
+    "hanzi": "甜粿",
+    "poj": "tiⁿ-kóe",
+    "meaning": "New Year rice cake — “sweet cake”",
+    "ports": [
+      "PH"
+    ]
+  },
+  {
+    "said": "siopao",
+    "hanzi": "燒包",
+    "poj": "sio-pau",
+    "meaning": "steamed bun — “hot bun”",
+    "ports": [
+      "PH"
+    ]
+  },
+  {
+    "said": "bakpao",
+    "hanzi": "肉包",
+    "poj": "bah-pau",
+    "meaning": "steamed meat bun",
+    "ports": [
+      "ID"
+    ]
+  },
+  {
+    "said": "kway teow / kwetiau",
+    "hanzi": "粿條",
+    "poj": "kóe-tiâu",
+    "meaning": "flat rice noodles",
+    "ports": [
+      "MY",
+      "SG",
+      "ID"
+    ]
+  },
+  {
+    "said": "cap cai",
+    "hanzi": "雜菜",
+    "poj": "cha̍p-chhài",
+    "meaning": "stir-fried mixed vegetables",
+    "ports": [
+      "ID"
+    ]
+  },
+  {
+    "said": "tauhu / tahu / taho",
+    "hanzi": "豆腐",
+    "poj": "tāu-hū",
+    "meaning": "tofu (taho: sweet silken tofu)",
+    "ports": [
+      "MY",
+      "ID",
+      "PH"
+    ]
+  },
+  {
+    "said": "bak kut teh",
+    "hanzi": "肉骨茶",
+    "poj": "bah-kut-tê",
+    "meaning": "pork rib “tea” soup",
+    "ports": [
+      "MY",
+      "SG"
+    ]
+  },
+  {
+    "said": "kuih / kue",
+    "hanzi": "粿",
+    "poj": "kóe",
+    "meaning": "rice-flour cakes",
+    "ports": [
+      "MY",
+      "ID"
+    ]
+  },
+  {
+    "said": "ketchup",
+    "hanzi": "膎汁",
+    "poj": "kê-chiap",
+    "meaning": "fermented fish sauce",
+    "ports": [
+      "ALL"
+    ],
+    "note": "A leading theory, still debated by etymologists."
+  }
+]
