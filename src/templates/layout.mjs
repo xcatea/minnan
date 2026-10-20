@@ -8,11 +8,12 @@ export const esc = (s = '') =>
 export function contact() {
   const env = process.env;
   const c = {
-    whatsapp: (env.CONTACT_WHATSAPP ?? CONTACT.whatsapp ?? '').replace(/\D/g, ''),
-    wechat: env.CONTACT_WECHAT ?? CONTACT.wechat ?? '',
-    wechatQr: env.CONTACT_WECHAT_QR ?? CONTACT.wechatQr ?? '',
-    messenger: env.CONTACT_MESSENGER ?? CONTACT.messenger ?? '',
-    email: env.CONTACT_EMAIL ?? CONTACT.email ?? '',
+    // Empty build variables fall back to the values in src/data/site.mjs.
+    whatsapp: (env.CONTACT_WHATSAPP || CONTACT.whatsapp || '').replace(/\D/g, ''),
+    wechat: env.CONTACT_WECHAT || CONTACT.wechat || '',
+    wechatQr: env.CONTACT_WECHAT_QR || CONTACT.wechatQr || '',
+    messenger: env.CONTACT_MESSENGER || CONTACT.messenger || '',
+    email: env.CONTACT_EMAIL || CONTACT.email || '',
   };
   c.any = Boolean(c.whatsapp || c.wechat || c.messenger || c.email);
   return c;

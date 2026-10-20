@@ -1,0 +1,13 @@
+# Cloudflare Pages configuration — the source of truth for bindings.
+# The deploy workflow fills in the D1 database id; do not edit the placeholder by hand.
+name = "minnan"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "minnan"
+database_id = "__D1_DATABASE_ID__"
+
+[ai]
+binding = "AI"

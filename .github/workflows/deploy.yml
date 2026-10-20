@@ -1,0 +1,158 @@
+# Builds minnan.org and deploys it to Cloudflare Pages on every push to main.
+# The first run also creates the Pages project and the D1 database, applies schema.sql,
+# attaches minnan.org / www.minnan.org and points DNS at Pages. Later runs just redeploy.
+#
+# Needs two repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   custom token: Account · Cloudflare Pages · Edit, Account · D1 · Edit,
+#                          Account · Workers AI · Read, Zone · DNS · Edit and Zone · Zone · Read (minnan.org)
+#   CLOUDFLARE_ACCOUNT_ID  shown on the minnan.org overview page in Cloudflare
+# Optional secrets, copied to the site as Pages secrets:
+#   NOTIFY_WEBHOOK, ANTHROPIC_API_KEY, CHAT_API_KEY, CHAT_API_URL, CHAT_MODEL, CHAT_PROVIDER,
+#   CHAT_HOURLY_LIMIT, CHAT_DAILY_LIMIT, CHAT_LOG_QUESTIONS
+# Optional variables (Variables tab), used when building pages:
+#   CONTACT_WHATSAPP, CONTACT_WECHAT, CONTACT_WECHAT_QR, CONTACT_MESSENGER, CONTACT_EMAIL, CF_BEACON_TOKEN
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  PROJECT: minnan
+  DOMAIN: minnan.org
+  CI: "true"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Check Cloudflare secrets
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (Settings → Secrets and variables → Actions), then re-run this workflow."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build the site
+        run: npm install --no-audit --no-fund && npm run build
+        env:
+          CONTACT_WHATSAPP: ${{ vars.CONTACT_WHATSAPP }}
+          CONTACT_WECHAT: ${{ vars.CONTACT_WECHAT }}
+          CONTACT_WECHAT_QR: ${{ vars.CONTACT_WECHAT_QR }}
+          CONTACT_MESSENGER: ${{ vars.CONTACT_MESSENGER }}
+          CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
+          CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
+
+      - name: Install Wrangler
+        run: npm install -g wrangler@4 && wrangler --version
+
+      - name: Make sure the Pages project exists
+        run: |
+          if curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+               "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$PROJECT" \
+               | jq -e '.success == true' >/dev/null; then
+            echo "Pages project $PROJECT exists."
+          else
+            wrangler pages project create "$PROJECT" --production-branch=main
+          fi
+
+      - name: Make sure the D1 database exists, and apply schema.sql
+        run: |
+          d1_id() {
+            wrangler d1 list --json 2>/dev/null | node -e '
+              let s = ""; process.stdin.on("data", d => s += d).on("end", () => {
+                const json = s.slice(s.indexOf("["), s.lastIndexOf("]") + 1) || "[]";
+                const db = JSON.parse(json).find(x => x.name === "minnan");
+                process.stdout.write(db ? (db.uuid || db.database_id || db.id || "") : "");
+              });'
+          }
+          ID=$(d1_id)
+          if [ -z "$ID" ]; then
+            wrangler d1 create minnan
+            ID=$(d1_id)
+          fi
+          if [ -z "$ID" ]; then echo "::error::Could not find or create the D1 database 'minnan'."; exit 1; fi
+          echo "D1 database id: $ID"
+          sed -i "s/__D1_DATABASE_ID__/$ID/" wrangler.toml
+          wrangler d1 execute minnan --remote --file=schema.sql
+
+      - name: Copy secrets to the site
+        env:
+          NOTIFY_WEBHOOK: ${{ secrets.NOTIFY_WEBHOOK }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CHAT_API_KEY: ${{ secrets.CHAT_API_KEY }}
+          CHAT_API_URL: ${{ secrets.CHAT_API_URL }}
+          CHAT_MODEL: ${{ secrets.CHAT_MODEL }}
+          CHAT_PROVIDER: ${{ secrets.CHAT_PROVIDER }}
+          CHAT_HOURLY_LIMIT: ${{ secrets.CHAT_HOURLY_LIMIT }}
+          CHAT_DAILY_LIMIT: ${{ secrets.CHAT_DAILY_LIMIT }}
+          CHAT_LOG_QUESTIONS: ${{ secrets.CHAT_LOG_QUESTIONS }}
+        run: |
+          for name in NOTIFY_WEBHOOK ANTHROPIC_API_KEY CHAT_API_KEY CHAT_API_URL CHAT_MODEL CHAT_PROVIDER CHAT_HOURLY_LIMIT CHAT_DAILY_LIMIT CHAT_LOG_QUESTIONS; do
+            value="${!name}"
+            if [ -n "$value" ]; then
+              printf '%s' "$value" | wrangler pages secret put "$name" --project-name "$PROJECT" >/dev/null && echo "Set $name"
+            fi
+          done
+
+      - name: Deploy
+        run: wrangler pages deploy --project-name "$PROJECT" --branch main --commit-hash "$GITHUB_SHA" --commit-dirty=true
+
+      - name: Attach minnan.org and point DNS at Pages
+        run: |
+          API=https://api.cloudflare.com/client/v4
+          AUTH="Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+          cf() { curl -sS -H "$AUTH" -H "Content-Type: application/json" "$@"; }
+
+          SUB=$(cf "$API/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$PROJECT" | jq -r '.result.subdomain // empty')
+          ZONE=$(cf "$API/zones?name=$DOMAIN" | jq -r '.result[0].id // empty')
+          if [ -z "$SUB" ] || [ -z "$ZONE" ]; then
+            echo "::warning::Could not read the Pages subdomain or the $DOMAIN zone. Check the token has Zone · Zone · Read and Zone · DNS · Edit for $DOMAIN. The site is deployed; only the domain step was skipped."
+            exit 0
+          fi
+          echo "Pages address: https://$SUB"
+
+          for HOST in "$DOMAIN" "www.$DOMAIN"; do
+            echo "--- $HOST"
+            cf -X POST "$API/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$PROJECT/domains" -d "{\"name\":\"$HOST\"}" \
+              | jq -c '{attached: .success, note: ([.errors[]?.message] | join("; "))}'
+
+            # Remove only the records that pointed the domain at GitHub Pages.
+            cf "$API/zones/$ZONE/dns_records?name=$HOST&per_page=100" | jq -c '.result[]' | while read -r rec; do
+              TYPE=$(jq -r .type <<<"$rec"); CONTENT=$(jq -r .content <<<"$rec"); RID=$(jq -r .id <<<"$rec")
+              if { [ "$TYPE" = A ] && [[ "$CONTENT" == 185.199.* ]]; } \
+                || { [ "$TYPE" = AAAA ] && [[ "$CONTENT" == 2606:50c0:* ]]; } \
+                || { [ "$TYPE" = CNAME ] && [[ "$CONTENT" == *github.io ]]; }; then
+                cf -X DELETE "$API/zones/$ZONE/dns_records/$RID" >/dev/null && echo "Removed GitHub Pages record: $TYPE $CONTENT"
+              fi
+            done
+
+            CURRENT=$(cf "$API/zones/$ZONE/dns_records?name=$HOST&per_page=100" | jq -r '[.result[] | select(.type=="A" or .type=="AAAA" or .type=="CNAME")] | map(.type + " " + .content) | join(", ")')
+            if [ "$CURRENT" = "CNAME $SUB" ]; then
+              echo "DNS already points at $SUB"
+            elif [ -z "$CURRENT" ]; then
+              cf -X POST "$API/zones/$ZONE/dns_records" \
+                -d "{\"type\":\"CNAME\",\"name\":\"$HOST\",\"content\":\"$SUB\",\"proxied\":true,\"comment\":\"Cloudflare Pages: $PROJECT\"}" \
+                | jq -c '{created: .success, note: ([.errors[]?.message] | join("; "))}'
+            else
+              echo "::warning::$HOST has other DNS records ($CURRENT). Left them alone; point $HOST at $SUB yourself if this is wrong."
+            fi
+          done

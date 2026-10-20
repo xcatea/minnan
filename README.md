@@ -49,7 +49,7 @@ build.mjs             ← 生成网站的脚本
 2. 填好开头 `---` 之间的字段，写正文
 3. 删掉 `draft: true`，提交到 GitHub
 
-Cloudflare 会在一两分钟内自动重新生成网站：文章页、栏目页、港口页、首页推荐、RSS、sitemap 全部自动更新。
+GitHub Actions 会在两三分钟内自动重新生成并发布网站：文章页、栏目页、港口页、首页推荐、RSS、sitemap 全部自动更新。
 
 在 GitHub 网页上就能完成：进入 `content/stories/` → Add file → Create new file。
 
@@ -63,28 +63,45 @@ npm run dev      # 打开 http://localhost:4321 ，改文件会自动重新生�
 npm run build    # 生成到 dist/
 ```
 
-## 部署到 Cloudflare Pages（一次性设置）
+## 部署：GitHub Actions 自动发布到 Cloudflare Pages
 
-域名已经在 Cloudflare，所以直接用 Cloudflare Pages 托管最省事。
+`main` 每次有新提交，`.github/workflows/deploy.yml` 就会自动构建并部署到 Cloudflare Pages，一般两三分钟。第一次运行还会自动完成这些：
 
-1. Cloudflare 后台 → Workers & Pages → Create → Pages → Connect to Git，选 `xcatea/minnan`
-2. 构建设置：
-   - Production branch：`main`
-   - Build command：`npm run build`
-   - Build output directory：`dist`
-   - 环境变量 `NODE_VERSION` = `22`
-3. 部署成功后会得到一个 `xxx.pages.dev` 地址，先在这里检查一遍
-4. 项目 → Custom domains → 添加 `minnan.org` 和 `www.minnan.org`。Cloudflare 会自动改好 DNS
-5. GitHub 仓库 → Settings → Pages → 关闭 GitHub Pages（避免两边同时托管）
+- 创建 Pages 项目 `minnan`
+- 创建 D1 数据库 `minnan` 并执行 `schema.sql`（每次部署都会再执行一遍，不会删数据）
+- 按 `wrangler.toml` 绑定数据库 `DB` 和 Workers AI `AI`
+- 把 `minnan.org`、`www.minnan.org` 挂到 Pages，并删除原来指向 GitHub Pages 的 DNS 记录，改成指向 Pages
 
-其他分支（例如 `astro-v2`）推送后会自动生成预览地址，适合先看效果再合并。
+### 一次性准备：两个密钥
 
-## 开通数据库（订阅、订单、对话都用它）
+1. **Cloudflare API 令牌**：Cloudflare 后台右上角头像 → My Profile → API Tokens → Create Token → Create Custom Token，权限加这几行：
+   - Account · Cloudflare Pages · Edit
+   - Account · D1 · Edit
+   - Account · Workers AI · Read
+   - Zone · DNS · Edit
+   - Zone · Zone · Read
 
-1. Cloudflare 后台 → Storage & Databases → D1 → Create，名字填 `minnan`
-2. 打开这个数据库 → Console，把 `schema.sql` 的全部内容粘贴进去执行（以后更新了也可以再执行一次，不会删数据）
-3. Pages 项目 → Settings → Bindings → Add → D1 database，变量名填 `DB`，选 `minnan`
-4. 重新部署一次（Deployments → Retry deployment）
+   Zone Resources 选 Include · Specific zone · `minnan.org`，然后创建，复制令牌（只显示一次）。
+2. **Account ID**：Cloudflare 后台打开 minnan.org 的 Overview 页面，右下角 API 区域有 Account ID。
+3. 打开 GitHub 仓库 → Settings → Secrets and variables → Actions → **New repository secret**，添加：
+   - `CLOUDFLARE_API_TOKEN` = 上面的令牌
+   - `CLOUDFLARE_ACCOUNT_ID` = Account ID
+4. 仓库 → Actions → Deploy to Cloudflare Pages → **Run workflow**（或者随便提交一次）。
+
+运行完在 Actions 日志的最后一步可以看到 Pages 地址和 DNS 改动。确认 minnan.org 打开的是新网站后，到仓库 Settings → Pages 把 GitHub Pages 关掉。
+
+### 网站用的变量和密钥
+
+都在 GitHub 仓库 → Settings → Secrets and variables → Actions 里设置，下次部署生效（改完可以手动 Run workflow）：
+
+- **Variables**（构建网页时用）：`CONTACT_WHATSAPP`、`CONTACT_WECHAT`、`CONTACT_WECHAT_QR`、`CONTACT_MESSENGER`、`CONTACT_EMAIL`、`CF_BEACON_TOKEN`
+- **Secrets**（会同步给网站后端）：`NOTIFY_WEBHOOK`、`ANTHROPIC_API_KEY`、`CHAT_API_KEY`、`CHAT_API_URL`、`CHAT_MODEL`、`CHAT_PROVIDER`、`CHAT_HOURLY_LIMIT`、`CHAT_DAILY_LIMIT`、`CHAT_LOG_QUESTIONS`
+
+数据库和 AI 的绑定写在 `wrangler.toml` 里，所以 Cloudflare 后台不能再手动改这两项绑定。
+
+## 数据库
+
+D1 数据库 `minnan` 由部署自动创建。查看数据：Cloudflare 后台 → Storage & Databases → D1 → `minnan` → Console。
 
 常用查询（D1 Console 里执行）：
 
@@ -113,7 +130,7 @@ SELECT question, page, visitor_country, created_at FROM chat_questions ORDER BY 
 
 ### 2. 填联系方式
 
-在 `src/data/site.mjs` 的 `CONTACT` 里填，或者在 Cloudflare Pages → Settings → Variables（Build 变量）里设置，不用改代码：
+在 `src/data/site.mjs` 的 `CONTACT` 里填，或者在 GitHub 仓库 → Settings → Secrets and variables → Actions → **Variables** 里设置，不用改代码：
 
 | 变量 | 例子 |
 |---|---|
@@ -127,7 +144,7 @@ SELECT question, page, visitor_country, created_at FROM chat_questions ORDER BY 
 
 ### 3. 订单推送到手机
 
-在 Pages → Settings → Variables and Secrets 加一个 **Secret**：`NOTIFY_WEBHOOK`。
+在 GitHub 仓库 → Settings → Secrets and variables → Actions 加一个 **Secret**：`NOTIFY_WEBHOOK`，下次部署会同步给网站。
 
 - 企业微信：建一个只有自己的群 → 群设置 → 添加群机器人 → 复制 Webhook 地址
 - 飞书 / 钉钉：群设置 → 机器人 → 自定义机器人 → 复制 Webhook
@@ -149,13 +166,9 @@ SELECT question, page, visitor_country, created_at FROM chat_questions ORDER BY 
 
 **不配置也能用**：会用网站自己的数据（商品、词簿、寄送规则）做固定回答。
 
-**接上 AI（推荐 Workers AI，同一个 Cloudflare 账号，不用另外注册）**：
+**AI 默认已接上**：`wrangler.toml` 里绑定了 Workers AI（同一个 Cloudflare 账号，不用另外注册），默认模型是 `@cf/aisingapore/gemma-sea-lion-v4-27b-it`，专门针对东南亚语言（英语、中文、他加禄语、马来语、印尼语）调过。想换模型，加 GitHub Secret `CHAT_MODEL`。不想用 AI，加 `CHAT_PROVIDER` = `off`。
 
-1. Pages 项目 → Settings → Bindings → Add → **Workers AI**，变量名填 `AI`
-2. 重新部署。默认模型是 `@cf/aisingapore/gemma-sea-lion-v4-27b-it`，专门针对东南亚语言（英语、中文、他加禄语、马来语、印尼语）调过
-3. 想换模型，加变量 `CHAT_MODEL`
-
-也可以接其它服务（填了就优先用）：
+也可以接其它服务（填了就优先用，都加在 GitHub Secrets 里）：
 
 - 任何 OpenAI 兼容接口（DeepSeek、通义千问国际版等）：`CHAT_API_URL`、`CHAT_API_KEY`（Secret）、`CHAT_MODEL`
 - Claude：`ANTHROPIC_API_KEY`（Secret），默认模型 `claude-haiku-5-5`
@@ -169,7 +182,7 @@ SELECT question, page, visitor_country, created_at FROM chat_questions ORDER BY 
 ## 真实访客统计（可选）
 
 Cloudflare 后台 → Analytics & Logs → Web Analytics → 添加 `minnan.org`，复制 token，
-在 Pages 项目的环境变量里加 `CF_BEACON_TOKEN` = 这个 token，重新部署即可。不用 cookie，不需要弹窗。
+在 GitHub 仓库的 Actions **Variables** 里加 `CF_BEACON_TOKEN` = 这个 token，重新部署即可。不用 cookie，不需要弹窗。
 
 ## 安全设置建议（处理域名页上的 7 条安全见解）
 
