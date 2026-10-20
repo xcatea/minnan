@@ -10,7 +10,7 @@
 // only the first question of a conversation, unless CHAT_LOG_QUESTIONS=0.
 import { ITEMS, SHOP } from '../../src/data/shop.mjs';
 import { PILLARS } from '../../src/data/site.mjs';
-import WORDS from '../../src/data/words.json' with { type: 'json' };
+import WORDS from '../../src/data/words.json';
 
 const PERSON = '[[person]]';
 
@@ -32,7 +32,7 @@ function catalog() {
 const wordList = () =>
   WORDS.map((w) => `${w.said} = ${w.hanzi} ${w.poj}: ${w.meaning}${w.note ? ` (${w.note})` : ''}`).join('\n');
 
-export function systemPrompt(page = '/') {
+function systemPrompt(page = '/') {
   return `You are the assistant on minnan.org, an independent cultural project about Hokkien (閩南, Minnan) heritage, written for descendants in the Philippines, Malaysia, Singapore, Indonesia, Taiwan and beyond. Many of them no longer read Chinese.
 
 Answer in the visitor's language (English, 中文, Tagalog, Malay, Indonesian …). Keep replies short — at most 120 words, plain text, no headings, no tables. Be warm, plain and exact.
@@ -73,7 +73,7 @@ const TOPICS = [
 ];
 const ORDERISH = /\b(order|buy|purchase|pay|payment|paypal|price|cost|how much|ship|shipping|deliver|address|send to|custom|discount|bulk|wholesale|track)\b|訂|订|買|买|多少錢|多少钱|付款|寄到|運費|运费|價|价/i;
 
-export function actionsFor(text) {
+function actionsFor(text) {
   const acts = [];
   for (const t of TOPICS) {
     if (t.re.test(text)) {
@@ -86,7 +86,7 @@ export function actionsFor(text) {
 }
 
 /* ------------------------------------------------------- scripted fallback */
-export function scripted(q) {
+function scripted(q) {
   const text = q.toLowerCase();
   const word = WORDS.find((w) =>
     w.said.toLowerCase().split(/\s*\/\s*/).some((s) => s && text.includes(s)) || q.includes(w.hanzi) || text.includes(w.poj.toLowerCase())
@@ -153,7 +153,7 @@ async function askWorkersAI(env, system, messages) {
   return d?.response ?? d?.choices?.[0]?.message?.content ?? d?.result?.response ?? '';
 }
 
-export function pickProvider(env) {
+function pickProvider(env) {
   const forced = (env.CHAT_PROVIDER || '').toLowerCase();
   if (forced === 'off' || forced === 'scripted') return null;
   if (forced === 'anthropic' || (!forced && env.ANTHROPIC_API_KEY)) return env.ANTHROPIC_API_KEY ? askAnthropic : null;
@@ -163,7 +163,7 @@ export function pickProvider(env) {
 }
 
 /* ------------------------------------------------------------ guard rails */
-export function cleanMessages(raw) {
+function cleanMessages(raw) {
   if (!Array.isArray(raw)) return [];
   const msgs = raw
     .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
@@ -247,8 +247,4 @@ export async function onRequestPost({ request, env }) {
     const s = scripted(question);
     return json({ ...s, actions: actionsFor(question) });
   }
-}
-
-export function onRequest() {
-  return new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
 }

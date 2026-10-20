@@ -39,7 +39,3 @@ export async function onRequestPost({ request, env }) {
     return reply('error', 500);
   }
 }
-
-export function onRequest() {
-  return new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
-}

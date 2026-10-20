@@ -81,7 +81,3 @@ export async function onRequestPost({ request, env }) {
   if (!saved && !pinged) return reply({ status: 'error' }, 500);
   return reply({ status: 'ok', ref });
 }
-
-export function onRequest() {
-  return new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
-}
